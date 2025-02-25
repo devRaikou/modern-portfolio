@@ -13,7 +13,7 @@
   - Smooth page transitions
 
 - 🎮 **Discord Integration**
-  - Real-time status updates via Lanyard API
+  - Real-time status updates via [Lanyard API](https://github.com/Phineas/lanyard)
   - Custom animated Discord card
   - Display current activity and Spotify status
   - Dynamic badge showcase
