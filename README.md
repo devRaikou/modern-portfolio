@@ -175,6 +175,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact
 
 Arda Gülez - [@devraikou](https://twitter.com/devraikou)
+           - [@ard4gulez](https://www.instagram.com/ard4gulez/)
+           - [@ardagulez](https://www.linkedin.com/in/ardagulez/)  
 
 Project Link: [https://github.com/devraikou/portfolio](https://github.com/devraikou/portfolio)
 
