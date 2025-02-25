@@ -65,7 +65,7 @@
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/devRaikou/modern-portfolio/portfolio.git
+   git clone https://github.com/devRaikou/modern-portfolio.git
    cd modern-portfolio
    ```
 
