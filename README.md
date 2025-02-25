@@ -34,7 +34,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/devraikou/portfolio.git
+git clone https://github.com/devraikou/modern-portfolio.git
 
 # Install dependencies
 npm install
