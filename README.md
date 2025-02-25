@@ -1,7 +1,7 @@
 # 🌟 Modern Portfolio Website
 
 <div align="center">
-  
+  <img src="public/images/preview.png" alt="Portfolio Preview" width="100%">
   
   <p align="center">
     A modern, animated portfolio website built with Next.js 14 and TypeScript
