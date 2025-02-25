@@ -65,8 +65,8 @@
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/portfolio.git
-   cd portfolio
+   git clone https://github.com/devRaikou/modern-portfolio/portfolio.git
+   cd modern-portfolio
    ```
 
 2. Install dependencies
