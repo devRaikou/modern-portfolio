@@ -140,7 +140,6 @@ Modify animations in `src/app/globals.css`:
 Update your information in:
 - `src/app/page.tsx` - Main content
 - `src/components/DiscordCard.tsx` - Social links
-- `src/lib/constants.ts` - Configuration
 
 ## 🔑 Admin Dashboard
 
