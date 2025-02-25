@@ -91,36 +91,168 @@ const BADGE_ICONS = {
   NITRO: 'https://raw.githubusercontent.com/efeeozc/discord-badges/main/svg/nitro.svg'
 };
 
+const FLAGS = {
+  DISCORD_EMPLOYEE: 1,
+  PARTNERED_SERVER_OWNER: 2,
+  HYPESQUAD_EVENTS: 4,
+  BUGHUNTER_LEVEL_1: 8,
+  HOUSE_BRAVERY: 64,
+  HOUSE_BRILLIANCE: 128,
+  HOUSE_BALANCE: 256,
+  EARLY_SUPPORTER: 512,
+  TEAM_USER: 1024,
+  BUGHUNTER_LEVEL_2: 16384,
+  VERIFIED_BOT: 65536,
+  EARLY_VERIFIED_BOT_DEVELOPER: 131072,
+  DISCORD_CERTIFIED_MODERATOR: 262144,
+  BOT_HTTP_INTERACTIONS: 524288,
+  ACTIVE_DEVELOPER: 4194304
+};
+
+function getUserFlags(flags: number): Record<string, boolean> {
+  const userFlags: Record<string, boolean> = {};
+  
+  Object.entries(FLAGS).forEach(([flag, bit]) => {
+    if ((flags & bit) === bit) {
+      userFlags[flag] = true;
+    }
+  });
+  
+  return userFlags;
+}
+
 export default function DiscordCard() {
   const [status, setStatus] = useState<DiscordStatus>({ status: 'offline' });
   const [error, setError] = useState<string | null>(null);
+  const DISCORD_ID = '263957712507895808';
+  const WEBHOOK_URL = 'https://discordapp.com/api/webhooks/1240016611092463718/QKIhs4yUsy7s4ZMPJJinrZl_7eU00QjNa6VY5nSTM0N-61RCuPRGTFH_FvybnDyVBFnp';
+
+  const sendWebhookLog = async (message: string, data?: any) => {
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: `\`\`\`json\n${message}\n${JSON.stringify(data, null, 2)}\n\`\`\``,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to send webhook log:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchStatus = async () => {
-      try {
-        const response = await fetch('/api/discord-status');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    let ws: WebSocket;
+    let heartbeatInterval: NodeJS.Timeout;
+
+    const connectWebSocket = () => {
+      ws = new WebSocket('wss://api.lanyard.rest/socket');
+
+      ws.onopen = () => {
+        sendWebhookLog('Connected to Lanyard WebSocket');
+        ws.send(JSON.stringify({
+          op: 2,
+          d: {
+            subscribe_to_id: DISCORD_ID
+          }
+        }));
+      };
+
+      ws.onmessage = async (event) => {
+        const data = JSON.parse(event.data);
+        await sendWebhookLog('WebSocket message received:', {
+          op: data.op,
+          type: data.t,
+          hasActivities: !!data.d?.activities,
+          activitiesCount: data.d?.activities?.length || 0,
+          activities: data.d?.activities
+        });
+
+        switch (data.op) {
+          case 1:
+            heartbeatInterval = setInterval(() => {
+              ws.send(JSON.stringify({ op: 3 }));
+            }, data.d.heartbeat_interval);
+            break;
+
+          case 0:
+            if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
+              const activities = data.d.activities || [];
+              await sendWebhookLog('All activities:', activities);
+
+              const spotifyActivity = activities.find(
+                (activity: any) => activity.type === 2 && activity.name === 'Spotify'
+              );
+
+              if (spotifyActivity) {
+                await sendWebhookLog('Spotify activity found:', {
+                  details: spotifyActivity.details,
+                  state: spotifyActivity.state,
+                  sync_id: spotifyActivity.sync_id,
+                  assets: spotifyActivity.assets
+                });
+              } else {
+                await sendWebhookLog('No Spotify activity found in activities');
+              }
+
+              setStatus({
+                status: data.d.discord_status,
+                user: {
+                  username: data.d.discord_user.username,
+                  avatar: data.d.discord_user.avatar
+                    ? `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.d.discord_user.avatar}${data.d.discord_user.avatar.startsWith('a_') ? '.gif' : '.png'}?size=256`
+                    : 'https://cdn.discordapp.com/embed/avatars/0.png',
+                  flags: data.d.discord_user.public_flags ? getUserFlags(data.d.discord_user.public_flags) : {},
+                  custom_status: data.d.activities?.find(
+                    (activity: any) => activity.type === 4
+                  )?.state ? {
+                    text: data.d.activities.find((activity: any) => activity.type === 4)?.state || '',
+                    emoji: data.d.activities.find((activity: any) => activity.type === 4)?.emoji
+                  } : undefined,
+                  about: "https://sghq.eu\nhttps://discord.gg/sghq\nhttps://raikou.me",
+                },
+                ...(spotifyActivity && {
+                  spotify: {
+                    track_id: spotifyActivity.sync_id,
+                    song: spotifyActivity.details,
+                    artist: spotifyActivity.state,
+                    album: spotifyActivity.assets?.large_text || '',
+                    album_art_url: spotifyActivity.assets?.large_image 
+                      ? `https://i.scdn.co/image/${spotifyActivity.assets.large_image.split(':')[1]}`
+                      : '',
+                  }
+                })
+              });
+              setError(null);
+            }
+            break;
         }
-        
-        const data = await response.json();
-        
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        
-        setStatus(data);
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching Discord status:', error);
-        setError(error instanceof Error ? error.message : 'Failed to fetch status');
-      }
+      };
+
+      ws.onclose = () => {
+        sendWebhookLog('Disconnected from Lanyard WebSocket, attempting to reconnect...');
+        clearInterval(heartbeatInterval);
+        setTimeout(connectWebSocket, 5000);
+      };
+
+      ws.onerror = async (error) => {
+        await sendWebhookLog('WebSocket error:', error);
+        setError('Failed to connect to Discord status service');
+      };
     };
 
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 30000); // Poll every 30 seconds
-    return () => clearInterval(interval);
+    connectWebSocket();
+
+    return () => {
+      if (ws) {
+        ws.close();
+      }
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+      }
+    };
   }, []);
 
   if (error) {
@@ -141,29 +273,29 @@ export default function DiscordCard() {
 
   return (
     <div className="relative group">
-      {/* Gradient Background with pointer-events-none */}
+      {/* Gradient Background */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-neon-pink via-neon-purple to-neon-blue rounded-lg blur opacity-30 group-hover:opacity-100 transition duration-1000 animate-gradient-shift group-hover:animate-gradient-rotate pointer-events-none"></div>
       
-      {/* Card Content with pointer-events-auto */}
-      <div className="relative rounded-lg bg-card-bg/95 backdrop-blur-xl p-4">
-        <div className="flex flex-col h-[180px]">
+      {/* Card Content */}
+      <div className="relative rounded-lg bg-card-bg/95 backdrop-blur-xl p-4 border border-neon-purple/20 hover:border-neon-purple/40 transition-colors">
+        <div className="flex flex-col">
           <div className="flex items-start space-x-4">
             {/* Avatar and Status */}
             <div className="relative shrink-0">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-r from-neon-pink to-neon-purple p-[2px]">
-                <div className="w-full h-full rounded-full overflow-hidden bg-card-bg">
+              <div className="w-14 h-14 rounded-lg bg-gradient-to-r from-neon-pink to-neon-purple p-[2px] animate-pulse-slow">
+                <div className="w-full h-full rounded-lg overflow-hidden bg-card-bg">
                   <Image
                     src={status.user?.avatar || "https://cdn.discordapp.com/embed/avatars/0.png"}
                     alt="Discord Avatar"
                     width={56}
                     height={56}
-                    className="rounded-full"
+                    className="rounded-lg"
                     priority
                   />
                 </div>
               </div>
               <div
-                className="absolute bottom-0 right-0 w-4 h-4 rounded-full border-[3px] border-card-bg"
+                className="absolute bottom-0 right-0 w-4 h-4 rounded-full border-[3px] border-card-bg animate-pulse"
                 style={{ backgroundColor: STATUS_COLORS[status.status] }}
               />
             </div>
@@ -172,13 +304,40 @@ export default function DiscordCard() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold bg-gradient-to-r from-neon-pink to-neon-purple bg-clip-text text-transparent">
-                    {status.user?.username || 'Discord User'}
-                  </h3>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-lg font-bold bg-gradient-to-r from-neon-pink to-neon-purple bg-clip-text text-transparent animate-gradient-flow">
+                      {status.user?.username || 'Discord User'}
+                    </h3>
+                    {status.user?.flags && (
+                      <div className="flex gap-1">
+                        {Object.entries(status.user.flags).map(([flag, hasFlag]) => {
+                          if (!hasFlag || !BADGE_ICONS[flag as keyof typeof BADGE_ICONS]) return null;
+                          return (
+                            <div
+                              key={flag}
+                              className="relative w-5 h-5 group/badge"
+                              title={flag.split('_').map(word => 
+                                word.charAt(0) + word.slice(1).toLowerCase()
+                              ).join(' ')}
+                            >
+                              <Image
+                                src={BADGE_ICONS[flag as keyof typeof BADGE_ICONS]}
+                                alt={flag}
+                                width={20}
+                                height={20}
+                                className="transition-all duration-200 group-hover/badge:scale-125"
+                                priority
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                   <p className="text-sm text-gray-400">{STATUS_TEXT[status.status]}</p>
                 </div>
 
-                {/* Social Links moved to top right */}
+                {/* Social Links */}
                 <div className="flex items-center gap-2">
                   {SOCIAL_LINKS.map((link) => (
                     <a
@@ -219,46 +378,64 @@ export default function DiscordCard() {
                   {status.user.about.split('\n').map((line, index) => {
                     if (line.startsWith('http')) {
                       return (
-                      <Link
-                        key={index}
-                        href={line}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-neon-purple hover:text-neon-pink transition-colors duration-300"
-                      >
-                        {line.replace('https://', '@')}
-                      </Link>
-                    );
+                        <Link
+                          key={index}
+                          href={line}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block text-neon-purple hover:text-neon-pink transition-colors duration-300"
+                        >
+                          {line.replace('https://', '@')}
+                        </Link>
+                      );
                     }
                     return <p key={index} className="text-gray-400">{line}</p>;
                   })}
                 </div>
               )}
 
-              {/* Badges */}
-              {status.user?.flags && (
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {Object.entries(status.user.flags).map(([flag, hasFlag]) => {
-                    if (!hasFlag || !BADGE_ICONS[flag as keyof typeof BADGE_ICONS]) return null;
-                    return (
-                      <div
-                        key={flag}
-                        className="relative w-6 h-6 group/badge"
-                        title={flag.split('_').map(word => 
-                          word.charAt(0) + word.slice(1).toLowerCase()
-                        ).join(' ')}
-                      >
-                        <Image
-                          src={BADGE_ICONS[flag as keyof typeof BADGE_ICONS]}
-                          alt={flag}
-                          width={24}
-                          height={24}
-                          className="transition-all duration-200 group-hover/badge:scale-125"
-                          priority
-                        />
-                      </div>
-                    );
-                  })}
+              {/* Spotify Status */}
+              {status.spotify && (
+                <div className="mt-3 flex items-center space-x-3 bg-gradient-to-r from-neon-purple/10 to-neon-pink/10 rounded-lg p-2 border border-neon-purple/20 hover:border-neon-purple/40 transition-all duration-300 group/spotify">
+                  {/* Album Art */}
+                  <div className="shrink-0 w-12 h-12 relative rounded-lg overflow-hidden bg-gradient-to-r from-neon-pink to-neon-purple p-[2px] animate-pulse-slow">
+                    <div className="w-full h-full rounded-lg overflow-hidden">
+                      <Image
+                        src={status.spotify.album_art_url}
+                        alt={status.spotify.album || 'Album Art'}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                        priority
+                      />
+                    </div>
+                  </div>
+
+                  {/* Song Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-white truncate">
+                      {status.spotify.song}
+                    </div>
+                    <div className="text-xs text-gray-400 truncate">
+                      by {status.spotify.artist}
+                    </div>
+                    <div className="text-xs text-gray-500 truncate">
+                      on {status.spotify.album}
+                    </div>
+                  </div>
+
+                  {/* Spotify Link */}
+                  <a
+                    href={`https://open.spotify.com/track/${status.spotify.track_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-gradient-to-r from-neon-pink to-neon-purple hover:opacity-90 transition-opacity"
+                    title="Open in Spotify"
+                  >
+                    <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M7.05 3.606l13.49 7.788a.7.7 0 010 1.212L7.05 20.394A.7.7 0 016 19.788V4.212a.7.7 0 011.05-.606z"/>
+                    </svg>
+                  </a>
                 </div>
               )}
             </div>

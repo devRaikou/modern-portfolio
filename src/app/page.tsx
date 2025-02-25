@@ -70,6 +70,12 @@ const languages = [
     color: '#4479A1', 
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
     description: 'Relational database' 
+  },
+  { 
+    name: 'Git', 
+    color: '#F05032', 
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+    description: 'Version control system' 
   }
 ];
 
@@ -112,33 +118,51 @@ export default function Home() {
     <main className="min-h-screen bg-[#030304] overflow-hidden">
       {/* Hero Section with Enhanced Background */}
       <div className="relative min-h-screen flex items-center justify-center">
-        {/* Animated Background Elements */}
+        {/* Modern Animated Background */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-dark-bg/30 to-dark-bg/80"></div>
+          {/* Base Gradient Layer */}
+          <div className="absolute inset-0 bg-gradient-to-b from-dark-bg/90 via-dark-bg/50 to-dark-bg/90"></div>
           
-          {/* Enhanced Animated Grid */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] animate-pulse-slow"></div>
-            <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] rotate-45 scale-150 animate-pulse-slower"></div>
+          {/* Animated Mesh Gradient */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0 bg-gradient-conic from-neon-purple via-neon-pink to-neon-blue animate-gradient-rotate"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(131,56,236,0.1),transparent_50%)] animate-pulse-slow"></div>
           </div>
           
-          {/* Enhanced Floating Orbs */}
-          <div className="absolute top-20 left-[10%] w-32 h-32 bg-neon-purple/5 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-40 right-[15%] w-40 h-40 bg-neon-pink/5 rounded-full blur-3xl animate-float-delayed" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-20 left-[20%] w-36 h-36 bg-neon-blue/5 rounded-full blur-3xl animate-float-reverse" style={{ animationDelay: '2s' }}></div>
+          {/* Enhanced Grid Pattern */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] animate-pulse-slower"></div>
+            <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] rotate-45 scale-150 animate-pulse-slower" style={{ animationDelay: '2s' }}></div>
+          </div>
           
-          {/* Additional Floating Elements */}
-          <div className="absolute top-1/3 right-[30%] w-24 h-24 bg-neon-purple/3 rounded-full blur-2xl animate-pulse-glow"></div>
-          <div className="absolute bottom-1/3 left-[35%] w-28 h-28 bg-neon-pink/3 rounded-full blur-2xl animate-pulse-glow-delayed"></div>
+          {/* Dynamic Light Effects */}
+          <div className="absolute inset-0">
+            {/* Glowing Orbs */}
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-neon-purple/5 rounded-full blur-3xl animate-float-slow"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-neon-pink/5 rounded-full blur-3xl animate-float-reverse" style={{ animationDelay: '2s' }}></div>
+            
+            {/* Moving Light Beams */}
+            <div className="absolute h-[200%] w-px left-1/3 bg-gradient-to-b from-transparent via-neon-purple/20 to-transparent animate-scan-vertical"></div>
+            <div className="absolute h-[200%] w-px right-1/3 bg-gradient-to-b from-transparent via-neon-pink/20 to-transparent animate-scan-vertical" style={{ animationDelay: '3s' }}></div>
+            
+            {/* Horizontal Scan Lines */}
+            <div className="absolute w-full h-px top-1/3 bg-gradient-to-r from-transparent via-neon-blue/20 to-transparent animate-scan-horizontal"></div>
+            <div className="absolute w-full h-px bottom-1/3 bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent animate-scan-horizontal" style={{ animationDelay: '2s' }}></div>
+          </div>
           
-          {/* Enhanced Radial Gradient */}
-          <div className="absolute inset-0 bg-gradient-radial from-neon-purple/5 via-transparent to-transparent animate-pulse-slow"></div>
+          {/* Interactive Particles */}
+          <div className="absolute inset-0">
+            <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-neon-purple rounded-full animate-ping opacity-30" style={{ animationDuration: '3s' }}></div>
+            <div className="absolute top-2/3 right-1/4 w-2 h-2 bg-neon-pink rounded-full animate-ping opacity-30" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
+            <div className="absolute bottom-1/4 left-2/3 w-2 h-2 bg-neon-blue rounded-full animate-ping opacity-30" style={{ animationDuration: '5s', animationDelay: '2s' }}></div>
+          </div>
           
-          {/* Animated Lines */}
+          {/* Cyberpunk-style Decorative Lines */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute h-[120%] w-px left-1/4 bg-gradient-to-b from-transparent via-neon-purple/10 to-transparent animate-scan-vertical"></div>
-            <div className="absolute h-[120%] w-px right-1/4 bg-gradient-to-b from-transparent via-neon-pink/10 to-transparent animate-scan-vertical" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute top-[10%] left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-purple/10 to-transparent"></div>
+            <div className="absolute top-[90%] left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-pink/10 to-transparent"></div>
+            <div className="absolute left-[10%] top-0 h-full w-px bg-gradient-to-b from-transparent via-neon-blue/10 to-transparent"></div>
+            <div className="absolute left-[90%] top-0 h-full w-px bg-gradient-to-b from-transparent via-neon-purple/10 to-transparent"></div>
           </div>
         </div>
         
