@@ -9,15 +9,15 @@
     <a href="https://raikou.me"><strong>View Demo »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/devraikou/portfolio/issues">Report Bug</a>
+    <a href="https://github.com/devraikou/modern-portfolio/issues">Report Bug</a>
     ·
-    <a href="https://github.com/devraikou/portfolio/issues">Request Feature</a>
+    <a href="https://github.com/devraikou/modern-portfolio/issues">Request Feature</a>
   </p>
 
-  ![GitHub stars](https://img.shields.io/github/stars/devraikou/portfolio)
-  ![GitHub forks](https://img.shields.io/github/forks/devraikou/portfolio)
-  ![GitHub issues](https://img.shields.io/github/issues/devraikou/portfolio)
-  ![GitHub license](https://img.shields.io/github/license/devraikou/portfolio)
+  ![GitHub stars](https://img.shields.io/github/stars/devraikou/modern-portfolio)
+  ![GitHub forks](https://img.shields.io/github/forks/devraikou/modern-portfolio)
+  ![GitHub issues](https://img.shields.io/github/issues/devraikou/modern-portfolio)
+  ![GitHub license](https://img.shields.io/github/license/devraikou/modern-portfolio)
 </div>
 
 ## ✨ Features
@@ -178,7 +178,7 @@ Arda Gülez - [@devraikou](https://twitter.com/devraikou)
            - [@ard4gulez](https://www.instagram.com/ard4gulez/)
            - [@ardagulez](https://www.linkedin.com/in/ardagulez/)  
 
-Project Link: [https://github.com/devraikou/portfolio](https://github.com/devraikou/portfolio)
+Project Link: [https://github.com/devraikou/modern-portfolio](https://github.com/devraikou/modern-portfolio)
 
 ---
 
