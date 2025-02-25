@@ -1,7 +1,21 @@
 # Modern Portfolio Website
 
-<div align="center">
-  <img src="public/images/preview.png" alt="Portfolio Preview" width="100%">
+  <p align="center">
+    <img src="public/images/preview.png" alt="Portfolio Preview" width="100%">
+    A modern, animated portfolio website built with Next.js 14 and TypeScript
+    <br />
+    <a href="https://raikou.me"><strong>View Demo »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/devraikou/modern-portfolio/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/devraikou/modern-portfolio/issues">Request Feature</a>
+  </p>
+
+  ![GitHub stars](https://img.shields.io/github/stars/devraikou/modern-portfolio)
+  ![GitHub forks](https://img.shields.io/github/forks/devraikou/modern-portfolio)
+  ![GitHub issues](https://img.shields.io/github/issues/devraikou/modern-portfolio)
+  ![GitHub license](https://img.shields.io/github/license/devraikou/modern-portfolio)
 </div>
 
 ## ✨ Features
@@ -42,6 +56,13 @@ npm install
 # Run the development server
 npm run dev
 ```
+## 🌟 Acknowledgments
+
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Lanyard API](https://github.com/Phineas/lanyard)
+- [MongoDB](https://www.mongodb.com/)
 
 ## 📱 Contact
 
