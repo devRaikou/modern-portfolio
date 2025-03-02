@@ -48,7 +48,7 @@ npm run dev
 - GitHub: [devraikou](https://github.com/devraikou)
 - Instagram: [ard4gulez](https://instagram.com/ard4gulez)
 - LinkedIn: [ardagulez](https://linkedin.com/in/ardagulez)
-- Email: [arda@raikou.me](mailto:arda@raikou.me)
+- Email: [raikou@sghq.eu](mailto:raikou@sghq.eu)
 
 ## 📝 License
 
