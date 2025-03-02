@@ -28,6 +28,12 @@ module.exports = {
         'gradient-shift': 'gradient-shift 8s ease infinite',
         'scan-vertical': 'scan-vertical 8s ease-in-out infinite',
         'scan-horizontal': 'scan-horizontal 12s ease-in-out infinite',
+        'gradient': 'gradient 8s linear infinite',
+        'float-random': 'float-random 10s ease-in-out infinite',
+        'light-trail': 'light-trail 8s linear infinite',
+        'pulse-glow': 'pulse-glow 4s ease-in-out infinite',
+        'pulse-glow-delayed': 'pulse-glow 4s ease-in-out infinite 2s',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         glow: {
@@ -63,6 +69,44 @@ module.exports = {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' },
         },
+        gradient: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
+        },
+        'float-random': {
+          '0%, 100%': {
+            transform: 'translate(0, 0) scale(1)',
+            opacity: 0.5
+          },
+          '50%': {
+            transform: 'translate(20px, -20px) scale(1.1)',
+            opacity: 1
+          }
+        },
+        'light-trail': {
+          '0%': {
+            transform: 'translateX(-100%)'
+          },
+          '100%': {
+            transform: 'translateX(100%)'
+          }
+        },
+        'pulse-glow': {
+          '0%, 100%': {
+            opacity: 0.3,
+            transform: 'scale(1)'
+          },
+          '50%': {
+            opacity: 0.5,
+            transform: 'scale(1.1)'
+          }
+        }
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

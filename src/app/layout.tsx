@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   title: "Hi, I'm Arda | Full-Stack Developer",
   description: 'A passionate full-stack developer crafting innovative web experiences with modern technologies',
   icons: {
-    icon: '/images/favicon.ico',
+    icon: '/images/favicon.png',
+    shortcut: '/images/favicon.png',
+    apple: '/images/favicon.png',
   },
 };
 

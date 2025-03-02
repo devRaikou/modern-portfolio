@@ -118,52 +118,61 @@ export default function Home() {
     <main className="min-h-screen bg-[#030304] overflow-hidden">
       {/* Hero Section with Enhanced Background */}
       <div className="relative min-h-screen flex items-center justify-center">
-        {/* Modern Animated Background */}
+        {/* Modern Dynamic Background */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Base Gradient Layer */}
-          <div className="absolute inset-0 bg-gradient-to-b from-dark-bg/90 via-dark-bg/50 to-dark-bg/90"></div>
+          {/* Base Layer */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#050505] via-[#0a0a0a] to-[#050505]"></div>
           
-          {/* Animated Mesh Gradient */}
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute inset-0 bg-gradient-conic from-neon-purple via-neon-pink to-neon-blue animate-gradient-rotate"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(131,56,236,0.1),transparent_50%)] animate-pulse-slow"></div>
-          </div>
-          
-          {/* Enhanced Grid Pattern */}
+          {/* Animated Particles Layer */}
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] animate-pulse-slower"></div>
-            <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] rotate-45 scale-150 animate-pulse-slower" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute w-full h-full">
+              {[...Array(20)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute rounded-full mix-blend-screen animate-float-random"
+                  style={{
+                    width: `${Math.random() * 4 + 1}px`,
+                    height: `${Math.random() * 4 + 1}px`,
+                    background: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.3)`,
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDuration: `${Math.random() * 10 + 5}s`,
+                    animationDelay: `${Math.random() * 5}s`
+                  }}
+                ></div>
+              ))}
+            </div>
           </div>
           
-          {/* Dynamic Light Effects */}
+          {/* Geometric Patterns */}
           <div className="absolute inset-0">
-            {/* Glowing Orbs */}
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-neon-purple/5 rounded-full blur-3xl animate-float-slow"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-neon-pink/5 rounded-full blur-3xl animate-float-reverse" style={{ animationDelay: '2s' }}></div>
-            
-            {/* Moving Light Beams */}
-            <div className="absolute h-[200%] w-px left-1/3 bg-gradient-to-b from-transparent via-neon-purple/20 to-transparent animate-scan-vertical"></div>
-            <div className="absolute h-[200%] w-px right-1/3 bg-gradient-to-b from-transparent via-neon-pink/20 to-transparent animate-scan-vertical" style={{ animationDelay: '3s' }}></div>
-            
-            {/* Horizontal Scan Lines */}
-            <div className="absolute w-full h-px top-1/3 bg-gradient-to-r from-transparent via-neon-blue/20 to-transparent animate-scan-horizontal"></div>
-            <div className="absolute w-full h-px bottom-1/3 bg-gradient-to-r from-transparent via-neon-purple/20 to-transparent animate-scan-horizontal" style={{ animationDelay: '2s' }}></div>
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-transparent via-neon-purple/5 to-transparent animate-pulse-slow"></div>
           </div>
           
-          {/* Interactive Particles */}
+          {/* Dynamic Light Trails */}
           <div className="absolute inset-0">
-            <div className="absolute top-1/4 left-1/3 w-2 h-2 bg-neon-purple rounded-full animate-ping opacity-30" style={{ animationDuration: '3s' }}></div>
-            <div className="absolute top-2/3 right-1/4 w-2 h-2 bg-neon-pink rounded-full animate-ping opacity-30" style={{ animationDuration: '4s', animationDelay: '1s' }}></div>
-            <div className="absolute bottom-1/4 left-2/3 w-2 h-2 bg-neon-blue rounded-full animate-ping opacity-30" style={{ animationDuration: '5s', animationDelay: '2s' }}></div>
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute h-px w-full animate-light-trail"
+                style={{
+                  top: `${33 * (i + 1)}%`,
+                  background: 'linear-gradient(90deg, transparent, rgba(131, 56, 236, 0.3), transparent)',
+                  animationDelay: `${i * 2}s`
+                }}
+              ></div>
+            ))}
           </div>
           
-          {/* Cyberpunk-style Decorative Lines */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-[10%] left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-purple/10 to-transparent"></div>
-            <div className="absolute top-[90%] left-0 w-full h-px bg-gradient-to-r from-transparent via-neon-pink/10 to-transparent"></div>
-            <div className="absolute left-[10%] top-0 h-full w-px bg-gradient-to-b from-transparent via-neon-blue/10 to-transparent"></div>
-            <div className="absolute left-[90%] top-0 h-full w-px bg-gradient-to-b from-transparent via-neon-purple/10 to-transparent"></div>
+          {/* Glowing Orbs */}
+          <div className="absolute inset-0">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[100px] animate-pulse-glow"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-blue/5 rounded-full blur-[100px] animate-pulse-glow-delayed"></div>
           </div>
+          
+          {/* Interactive Hover Effect Layer */}
+          <div className="absolute inset-0 bg-gradient-radial from-transparent to-black/50 opacity-50"></div>
         </div>
         
         <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">

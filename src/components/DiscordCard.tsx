@@ -28,6 +28,17 @@ interface DiscordStatus {
     about?: string;
   };
   spotify?: SpotifyData;
+  game?: {
+    name: string;
+    details?: string;
+    state?: string;
+    assets?: {
+      large_image?: string;
+      small_image?: string;
+      large_text?: string;
+      small_text?: string;
+    };
+  };
   error?: string;
 }
 
@@ -186,6 +197,10 @@ export default function DiscordCard() {
                 (activity: any) => activity.type === 2 && activity.name === 'Spotify'
               );
 
+              const gameActivity = activities.find(
+                (activity: any) => activity.type === 0
+              );
+
               if (spotifyActivity) {
                 await sendWebhookLog('Spotify activity found:', {
                   details: spotifyActivity.details,
@@ -222,6 +237,23 @@ export default function DiscordCard() {
                     album_art_url: spotifyActivity.assets?.large_image 
                       ? `https://i.scdn.co/image/${spotifyActivity.assets.large_image.split(':')[1]}`
                       : '',
+                  }
+                }),
+                ...(gameActivity && {
+                  game: {
+                    name: gameActivity.name,
+                    details: gameActivity.details,
+                    state: gameActivity.state,
+                    assets: {
+                      large_image: gameActivity.assets?.large_image 
+                        ? `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`
+                        : undefined,
+                      small_image: gameActivity.assets?.small_image
+                        ? `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.small_image}.png`
+                        : undefined,
+                      large_text: gameActivity.assets?.large_text,
+                      small_text: gameActivity.assets?.small_text,
+                    }
                   }
                 })
               });
@@ -436,6 +468,70 @@ export default function DiscordCard() {
                       <path d="M7.05 3.606l13.49 7.788a.7.7 0 010 1.212L7.05 20.394A.7.7 0 016 19.788V4.212a.7.7 0 011.05-.606z"/>
                     </svg>
                   </a>
+                </div>
+              )}
+
+              {/* Game Activity */}
+              {status.game && (
+                <div className="mt-4 group/game cursor-pointer">
+                  <div className="flex items-center space-x-3 bg-gradient-to-r from-neon-purple/5 to-neon-pink/5 rounded-lg p-3 border border-neon-purple/10 group-hover/game:border-neon-purple/30 group-hover/game:from-neon-purple/10 group-hover/game:to-neon-pink/10 transition-all duration-300">
+                    {/* Game Image */}
+                    {status.game.assets?.large_image && (
+                      <div className="shrink-0 relative">
+                        <div className="w-12 h-12 rounded-lg overflow-hidden bg-card-bg group-hover/game:scale-105 transition-transform duration-300">
+                          <Image
+                            src={status.game.assets.large_image}
+                            alt={status.game.name}
+                            width={48}
+                            height={48}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                          {status.game.assets?.small_image && (
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full overflow-hidden border-2 border-card-bg">
+                              <Image
+                                src={status.game.assets.small_image}
+                                alt={status.game.assets.small_text || ''}
+                                width={16}
+                                height={16}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Game Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-2">
+                        <svg className="w-4 h-4 text-neon-purple/70 group-hover/game:text-neon-purple transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zM6 15h2v-2h2v-2H8V9H6v2H4v2h2z"/>
+                          <circle cx="14.5" cy="13.5" r="1.5"/>
+                          <circle cx="18.5" cy="10.5" r="1.5"/>
+                        </svg>
+                        <h4 className="text-white/90 font-medium truncate group-hover/game:text-white transition-colors duration-300">
+                          {status.game.name}
+                        </h4>
+                      </div>
+                      {status.game.details && (
+                        <p className="text-gray-400/80 text-sm mt-0.5 truncate group-hover/game:text-gray-400 transition-colors duration-300">
+                          {status.game.details}
+                        </p>
+                      )}
+                      {status.game.state && (
+                        <p className="text-gray-500/80 text-sm truncate group-hover/game:text-gray-500 transition-colors duration-300">
+                          {status.game.state}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Game Status Icon */}
+                    <div className="shrink-0 w-7 h-7 flex items-center justify-center rounded-lg bg-gradient-to-r from-neon-purple/20 to-neon-pink/20 group-hover/game:from-neon-purple/30 group-hover/game:to-neon-pink/30 transition-all duration-300">
+                      <svg className="w-3.5 h-3.5 text-white/70 group-hover/game:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7.05 3.606l13.49 7.788a.7.7 0 010 1.212L7.05 20.394A.7.7 0 016 19.788V4.212a.7.7 0 011.05-.606z"/>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
