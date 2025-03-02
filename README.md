@@ -13,7 +13,7 @@
   - Smooth page transitions
 
 - 🎮 **Discord Integration**
-  - Real-time status updates via Lanyard API
+  - Real-time status updates via [Lanyard API](https://github.com/Phineas/lanyard)
   - Custom animated Discord card
   - Display current activity and Spotify status
   - Dynamic badge showcase
@@ -34,7 +34,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/devraikou/portfolio.git
+git clone https://github.com/devraikou/modern-portfolio.git
 
 # Install dependencies
 npm install
